@@ -76,7 +76,8 @@ RUN wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip &&
     yes | ./sdkmanager "platform-tools" && \
     echo "export ANDROID_HOME=/usr/local/android-sdk" >> /etc/profile && \
     echo "export PATH=\$PATH:\$ANDROID_HOME/tools/bin" >> /etc/profile && \
-    source /etc/profile
+    chown jenkins.jenkins -R /usr/local/android-sdk && \
+    /bin/bash && source /etc/profile
 
 RUN pip install cffi --upgrade
 RUN pip install pip2pi ansible==2.0
