@@ -44,23 +44,21 @@ RUN curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-com
 RUN wget http://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz && \
     tar -zxvf apache-maven-3.5.4-bin.tar.gz && \
     mv apache-maven-3.5.4 /usr/local/maven && \
-    rm -fr apache-maven-3.5.4-bin.tar.gz && \
-    echo "export MAVEN_HOME=/usr/local/maven" >> /etc/profile && \
-    echo "export PATH=\$PATH:\$MAVEN_HOME/bin" >> /etc/profile
+    rm -fr apache-maven-3.5.4-bin.tar.gz
+
+ENV MAVEN_HOME /usr/local/maven
 
 # Install node8
 RUN wget https://nodejs.org/dist/v8.11.3/node-v8.11.3-linux-x64.tar.xz && \
     xz -d node-v8.11.3-linux-x64.tar.xz && tar xvf node-v8.11.3-linux-x64.tar && \
     mv node-v8.11.3-linux-x64 /usr/local/node && \
-    rm -fr node-v8.11.3-linux-x64.tar && \
-    echo "export PATH=\$PATH:/usr/local/node/bin" >> /etc/profile
+    rm -fr node-v8.11.3-linux-x64.tar    
 
 # Install gradle
 RUN wget https://downloads.gradle.org/distributions/gradle-4.9-bin.zip && \
     unzip gradle-4.9-bin.zip && \
     mv gradle-4.9 /usr/local/gradle && \
-    rm -fr gradle-4.9-bin.zip && \
-    echo "export PATH=\$PATH:/usr/local/gradle/bin" >> /etc/profile
+    rm -fr gradle-4.9-bin.zip
 
 # Install Android-SDK-Tools
 RUN wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip && \
@@ -74,10 +72,10 @@ RUN wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip &&
     yes | ./sdkmanager "platforms;android-26" && \
     yes | ./sdkmanager "platforms;android-27" && \
     yes | ./sdkmanager "platform-tools" && \
-    echo "export ANDROID_HOME=/usr/local/android-sdk" >> /etc/profile && \
-    echo "export PATH=\$PATH:\$ANDROID_HOME/tools/bin" >> /etc/profile && \
-    chown jenkins.jenkins -R /usr/local/android-sdk && \
-    /bin/bash && . /etc/profile
+    chown jenkins.jenkins -R /usr/local/android-sdk
+
+ENV ANDROID_HOME /usr/local/android-sdk
+ENV PATH $PATH:$MAVEN_HOME/bin:/usr/local/node/bin:/usr/local/gradle/bin:$ANDROID_HOME/tools/bin
 
 RUN pip install cffi --upgrade
 RUN pip install pip2pi ansible==2.0
