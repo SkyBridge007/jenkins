@@ -77,6 +77,7 @@ RUN wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip &&
 ENV ANDROID_HOME /usr/local/android-sdk
 ENV PATH $PATH:$MAVEN_HOME/bin:/usr/local/node/bin:/usr/local/gradle/bin:$ANDROID_HOME/tools/bin
 
+RUN npm install -g nrm && chown -R 1000.1000 /usr/local/node
 RUN pip install cffi --upgrade
 RUN pip install pip2pi ansible==2.0
 
